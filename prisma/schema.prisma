@@ -1,26 +1,34 @@
+// This is your Prisma schema file
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // Agar MongoDB ya MySQL hai toh yahan change karein
   url      = env("DATABASE_URL")
 }
 
-model Posts {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  content     String
-  bgImage     String
-  category    String
-  createdAt   DateTime @default(now())
-}
 model User {
   id            String    @id @default(cuid())
+  username      String    @unique
   email         String    @unique
-  password      String?   // Agar social login ke ilawa password rakhna ho
-  isVerified    Boolean   @default(false)
-  otp           String?
-  otpExpires    DateTime?
+  password      String
+  profilePic    String?
+  role          String    @default("user") // admin or user
+  posts         Post[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String   @db.Text
+  category  String
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
