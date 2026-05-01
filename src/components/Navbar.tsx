@@ -26,7 +26,7 @@ export default function Navbar() {
     { name: 'Wild Wonders', href: '/wild-wonders' },
     { name: 'Contact', href: '/contact' },
     { name: 'Admin', href: '/admin/login' },
-    { name: 'Chat', href: '/chat' },
+    
   ];
 
   return (

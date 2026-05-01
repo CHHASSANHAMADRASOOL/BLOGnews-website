@@ -1,46 +1,29 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// AI Configuration
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function POST(req: Request) {
   try {
     const { prompt } = await req.json();
 
-    // 1. Validation
-    if (!prompt) {
-      return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
-    }
-
-    // 2. Model Selection (Gemini 1.5 Flash for speed)
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    // 3. AI Settings (Creativity Control)
-    const generationConfig = {
-      temperature: 0.9,
-      topP: 1,
-      maxOutputTokens: 2048,
-    };
+    // SYSTEM PROMPT: Yahan apni website ki detail likhein
+    const systemInstruction = `
+      You are the official AI Assistant of "BlogNews". 
+      Website Info: BlogNews is a premium platform for SEO services, digital marketing, and tech news.
+      Services: We provide Domain Rating (DR) increase services with a 2-month guarantee, link building, and latest tech updates.
+      Owner: Managed by an expert SEO Specialist and Web Developer.
+      Tone: Professional, helpful, and witty. 
+      Rule: Always answer queries related to BlogNews services and SEO.
+    `;
 
-    // 4. Generate Content
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig,
-    });
+    const result = await model.generateContent(`${systemInstruction} \n User Question: ${prompt}`);
+    const response = await result.response.text();
 
-    const responseText = result.response.text();
-
-    // 5. Success Response
-    return NextResponse.json({ 
-      success: true, 
-      data: responseText 
-    }, { status: 200 });
-
-  } catch (error: any) {
-    console.error("AI Route Error:", error.message);
-    return NextResponse.json({ 
-      error: "AI service is temporarily busy. Please try again." 
-    }, { status: 500 });
+    return NextResponse.json({ success: true, data: response });
+  } catch (error) {
+    return NextResponse.json({ error: "AI is sleeping right now!" }, { status: 500 });
   }
 }
