@@ -37,7 +37,7 @@ export default function Navbar() {
         
         {/* Logo */}
         <Link href="/" className="text-2xl font-black text-white tracking-tighter">
-          VIP<span className="text-blue-500">BLOG.</span>
+          Blog<span className="text-blue-500">News</span>
         </Link>
 
         {/* Desktop Links */}

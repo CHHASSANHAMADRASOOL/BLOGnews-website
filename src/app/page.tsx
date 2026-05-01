@@ -30,7 +30,7 @@ export default function HomePage() {
           </h2>
           
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-6">
-            VIP<span className="text-blue-600 drop-shadow-[0_0_15px_rgba(37,99,235,0.6)]">BLOG</span>
+            Blog<span className="text-blue-600 drop-shadow-[0_0_15px_rgba(37,99,235,0.6)]">News</span>
           </h1>
 
           <p className="max-w-2xl mx-auto text-gray-300 text-lg md:text-xl leading-relaxed mb-10 font-light">
